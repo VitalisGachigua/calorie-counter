@@ -1,4 +1,5 @@
 console.log("Script loaded");
+
 const foodForm = document.getElementById("food-form");
 const foodNameInput = document.getElementById("food-name");
 const caloriesInput = document.getElementById("calories");
@@ -45,6 +46,7 @@ function renderFoods() {
         foodList.innerHTML += foodHTML;
     }
 }
+
 function saveFoods() {
     localStorage.setItem("foods", JSON.stringify(foods));
 }
@@ -54,7 +56,7 @@ foodForm.addEventListener("submit", function (event) {
 
     const foodName = foodNameInput.value.trim();
     const calories = caloriesInput.value.trim();
-
+    
     if (foodName === "" || calories === "") {
         alert("Please fill in all fields.");
         return;
@@ -67,37 +69,38 @@ foodForm.addEventListener("submit", function (event) {
     };
 
     foods.push(food);
-    console.log(food)
     saveFoods();
     renderFoods();
     updateTotalCalories();
-
+    
     foodNameInput.value = "";
     caloriesInput.value = "";
 });
 
 foodList.addEventListener("click", function (event) {
-
     if (event.target.classList.contains("remove-btn")) {
-
         const id = Number(event.target.dataset.id);
-
         foods = foods.filter(function (food) {
             return food.id !== id;
         });
-
         saveFoods();
         renderFoods();
         updateTotalCalories();
     }
-    resetBtn.addEventListener("click", function () {
-
-    foods = [];
-    saveFoods();
-
-    renderFoods();
-
-    updateTotalCalories();
-
 });
+
+resetBtn.addEventListener("click", function () {
+      foods = [];
+     saveFoods();
+    renderFoods();
+    updateTotalCalories();
+});
+
+window.addEventListener("load", function () {
+const storedFoods = localStorage.getItem("foods");
+    if (storedFoods) {
+        foods = JSON.parse(storedFoods);
+        renderFoods();
+        updateTotalCalories();
+    }
 });
