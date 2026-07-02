@@ -1,3 +1,4 @@
+console.log("Script loaded");
 const foodForm = document.getElementById("food-form");
 const foodNameInput = document.getElementById("food-name");
 const caloriesInput = document.getElementById("calories");
@@ -19,6 +20,32 @@ function updateTotalCalories() {
     totalCalories.textContent = total + " kcal";
 }
 
+function renderFoods() {
+    foodList.innerHTML = "";
+
+    for (let i = 0; i < foods.length; i++) {
+
+        const food = foods[i];
+
+        const foodHTML = `
+        <div class="flex justify-between items-center bg-slate-100 p-3 rounded-lg mb-2">
+            <div>
+                <p class="font-semibold">${food.name}</p>
+                <p class="text-sm text-gray-600">${food.calories} Calories</p>
+            </div>
+
+            <button
+                class="remove-btn bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded-lg"
+                data-id="${food.id}">
+                Remove
+            </button>
+        </div>
+        `;
+
+        foodList.innerHTML += foodHTML;
+    }
+}
+
 foodForm.addEventListener("submit", function (event) {
     event.preventDefault();
 
@@ -29,37 +56,44 @@ foodForm.addEventListener("submit", function (event) {
         alert("Please fill in all fields.");
         return;
     }
-    console.log(foodName);
-    console.log(calories);
 
-     const food = {
+    const food = {
         id: Date.now(),
         name: foodName,
         calories: Number(calories)
     };
 
     foods.push(food);
+    console.log(food)
+
+    renderFoods();
     updateTotalCalories();
-    const foodHTML = `
-        <div class="flex justify-between items-center bg-slate-100 p-3 rounded-lg mb-2">
-            <div>
-                <p class="font-semibold">${food.name}</p>
-                <p class="text-sm text-gray-600">${food.calories} Calories</p>
-            </div>
-
-            <button class="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded-lg">
-                Remove
-            </button>
-        </div>
-    `;
-
-    foodList.innerHTML += foodHTML;
-
-    console.log(foods);
 
     foodNameInput.value = "";
     caloriesInput.value = "";
 });
 
-    
+foodList.addEventListener("click", function (event) {
 
+    if (event.target.classList.contains("remove-btn")) {
+
+        const id = Number(event.target.dataset.id);
+
+        foods = foods.filter(function (food) {
+            return food.id !== id;
+        });
+
+
+        renderFoods();
+        updateTotalCalories();
+    }
+    resetBtn.addEventListener("click", function () {
+
+    foods = [];
+
+    renderFoods();
+
+    updateTotalCalories();
+
+});
+});
