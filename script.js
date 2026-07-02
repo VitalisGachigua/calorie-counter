@@ -45,6 +45,9 @@ function renderFoods() {
         foodList.innerHTML += foodHTML;
     }
 }
+function saveFoods() {
+    localStorage.setItem("foods", JSON.stringify(foods));
+}
 
 foodForm.addEventListener("submit", function (event) {
     event.preventDefault();
@@ -65,7 +68,7 @@ foodForm.addEventListener("submit", function (event) {
 
     foods.push(food);
     console.log(food)
-
+    saveFoods();
     renderFoods();
     updateTotalCalories();
 
@@ -83,13 +86,14 @@ foodList.addEventListener("click", function (event) {
             return food.id !== id;
         });
 
-
+        saveFoods();
         renderFoods();
         updateTotalCalories();
     }
     resetBtn.addEventListener("click", function () {
 
     foods = [];
+    saveFoods();
 
     renderFoods();
 
