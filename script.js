@@ -9,6 +9,16 @@ const resetBtn = document.getElementById("reset-btn");
 
 let foods = [];
 
+function updateTotalCalories() {
+    let total = 0;
+
+    for (let i = 0; i < foods.length; i++) {
+        total += foods[i].calories;
+    }
+
+    totalCalories.textContent = total + " kcal";
+}
+
 foodForm.addEventListener("submit", function (event) {
     event.preventDefault();
 
@@ -29,6 +39,7 @@ foodForm.addEventListener("submit", function (event) {
     };
 
     foods.push(food);
+    updateTotalCalories();
     const foodHTML = `
         <div class="flex justify-between items-center bg-slate-100 p-3 rounded-lg mb-2">
             <div>
@@ -43,7 +54,7 @@ foodForm.addEventListener("submit", function (event) {
     `;
 
     foodList.innerHTML += foodHTML;
-    
+
     console.log(foods);
 
     foodNameInput.value = "";
